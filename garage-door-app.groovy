@@ -51,9 +51,9 @@ def uninstalled() {
 
 def garageDoorChangeHandler(event) {
     logDebug "garageDoorChangeHandler() called: ${event.name} ${event.value}"
-    if (event.value == 'opening' && actualDoorState() != 'open') {
+    if (event.value == 'opening' && actualDoorState() == 'closed') {
         pressGarageDoorButton()
-    } else if (event.value == 'closing' && actualDoorState() != 'closed') {
+    } else if (event.value == 'closing' && actualDoorState() == 'open') {
         playAudioAlert()
         pressGarageDoorButton()
     }
