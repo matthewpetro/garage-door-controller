@@ -12,9 +12,10 @@ preferences {
     section('Devices') {
         input 'relay', 'capability.switch', title: 'Relay that controls the garage door opener', required: true
         input 'willRelayAutoOpen', 'bool', title: 'Set to true if the relay device is configured to auto open after a delay. Set to false if you want to use the setting below to open the relay after the specified number of milliseconds.', required: true, defaultValue: true
-        input 'relayCloseTime', 'number', title: 'Number of milliseconds to keep relay closed (default: 250, range: 100..1000)?', required: false, defaultValue: 250, range: '100..1000'
+        input 'relayCloseTime', 'number', title: 'Number of milliseconds to keep relay closed (default: 250, range: 100..1000)', required: false, defaultValue: 250, range: '100..1000'
         input 'openContactSensor', 'capability.contactSensor', title: 'Contact/tilt sensor that detects door open state', required: true
         input 'closedContactSensor', 'capability.contactSensor', title: 'Contact/tilt sensor that detects door closed state', required: true
+        input 'doorStateCheckDelay', 'number', title: 'Number of seconds to wait before verifying that door has opened or closed (default: 30, range: 1..60)', required: false, defaultValue: 30, range: '1..60'
     }
 
     section('Audio alerts - set either an alarm or a tone device') {
@@ -51,7 +52,8 @@ def uninstalled() {
 
 def garageDoorChangeHandler(event) {
     logDebug "garageDoorChangeHandler() called: ${event.name} ${event.value}"
-    def actualDoorState = actualDoorState()
+    String actualDoorState = actualDoorState()
+    logDebug "actualDoorState: ${actualDoorState}"
     if (event.value == 'opening' && actualDoorState == 'closed') {
         pressGarageDoorButton()
     } else if (event.value == 'closing' && actualDoorState == 'open') {
@@ -65,9 +67,25 @@ def garageDoorChangeHandler(event) {
         // it's in.
         pressGarageDoorButton()
     }
+
+    // If the door is opening or closing, we should check the door after a delay.
+    // The door may stop halfway, so having the garage door device in
+    // an unknown state is better than it being stuck in opening or closing.
+    if (['opening', 'closing'].contains(event.value)) {
+        runIn(doorStateCheckDelay, 'verifyDoorState')
+    }
 }
 
-private actualDoorState() {
+private verifyDoorState() {
+    logDebug 'verifyDoorState()'
+    def doorDevice = getChildDevice(state.deviceNetworkId)
+    def doorDeviceState = doorDevice.currentValue('door')
+    if (['opening', 'closing'].contains(doorDeviceState)) {
+        doorDevice.doorChangeHandler(actualDoorState())
+    }
+}
+
+private String actualDoorState() {
     if (openContactSensor.currentValue('contact') == 'closed') {
         return 'open'
     } else if (closedContactSensor.currentValue('contact') == 'closed') {
@@ -88,7 +106,7 @@ private pressGarageDoorButton() {
 
 private playAudioAlert() {
     if (null != alarm) {
-        if (debug) logDebug('Activating alarm device')
+        if (debug) logDebug 'Activating alarm device'
         if (alarmSound && alarmStrobe) {
             alarm.both()
         } else if (alarmSound) {
@@ -97,11 +115,11 @@ private playAudioAlert() {
             alarm.strobe()
         }
         pauseExecution(alarmDuration * 1000)
-        if (debug) logDebug('Stopping alarm device')
+        if (debug) logDebug 'Stopping alarm device'
         alarm.off()
     }
     if (null != tone) {
-        if (debug) logDebug('Playing alert tone')
+        if (debug) logDebug 'Playing alert tone'
         tone.beep()
     }
 }
@@ -130,6 +148,10 @@ def closedSensorHandler(event) {
     }
 }
 
-private logDebug(message) {
+private void logDebug(String message) {
+    if (debug) log.debug message
+}
+
+private void logDebug(GString message) {
     if (debug) log.debug message
 }
