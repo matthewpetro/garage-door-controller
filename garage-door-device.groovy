@@ -9,25 +9,31 @@ metadata {
     }
 }
 
+preferences {
+    section("Logging") {
+        input("debug", "bool", title: "Enable logging?", required: true, defaultValue: false)
+    }
+}
+
 def installed() {
-   log.debug "installed()"
+    logDebug "installed()"
 }
 
 def updated() {
-   log.debug "updated()"
+    logDebug "updated()"
 }
 
 def configure() {
-    log.debug "configure()"
+    logDebug "configure()"
 }
 
 def open() {
-    log.debug "open()"
+    logDebug "open()"
     sendEvent(name: "door", value: "opening")
 }
 
 def close() {
-    log.debug "close()"
+    logDebug "close()"
     sendEvent(name: "door", value: "closing")
 }
 
@@ -40,6 +46,10 @@ def off() {
 }
 
 def doorChangeHandler(newValue) {
-    log.debug "doorChangeHandler ${newValue}"
+    logDebug "doorChangeHandler ${newValue}"
     sendEvent(name: "door", value: newValue)
+}
+
+private logDebug(message) {
+    if (debug) log.debug message
 }

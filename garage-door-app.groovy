@@ -26,7 +26,6 @@ preferences {
 
     section("Logging") {
         input("debug", "bool", title: "Enable logging?", required: true, defaultValue: false)
-        input("descLog", "bool", title: "Enable descriptionText logging", required: true, defaultValue: true)
     }
 }
 
