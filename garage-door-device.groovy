@@ -11,7 +11,7 @@ metadata {
 
 preferences {
     section("Logging") {
-        input("debug", "bool", title: "Enable logging?", required: true, defaultValue: false)
+        input("debug", "bool", title: "Enable debug logging?", required: true, defaultValue: false)
     }
 }
 
