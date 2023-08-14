@@ -1,40 +1,40 @@
 metadata {
-    definition(name: "Simulated Garage Door Device", namespace: "Petro", author: "Matthew Petro") {
-        capability "Actuator"
-        capability "Configuration"
-        capability "Door Control"
-        capability "Garage Door Control"
-        capability "Sensor"
-        capability "Switch"
+    definition(name: 'Simulated Garage Door Device', namespace: 'Petro', author: 'Matthew Petro') {
+        capability 'Actuator'
+        capability 'Configuration'
+        capability 'Door Control'
+        capability 'Garage Door Control'
+        capability 'Sensor'
+        capability 'Switch'
     }
 }
 
 preferences {
-    section("Logging") {
-        input("debug", "bool", title: "Enable debug logging?", required: true, defaultValue: false)
+    section('Logging') {
+        input('debug', 'bool', title: 'Enable debug logging?', required: true, defaultValue: false)
     }
 }
 
 def installed() {
-    logDebug "installed()"
+    logDebug 'Installed'
 }
 
 def updated() {
-    logDebug "updated()"
+    logDebug 'Updated'
 }
 
 def configure() {
-    logDebug "configure()"
+    logDebug 'Configured'
 }
 
 def open() {
-    logDebug "open()"
-    sendEvent(name: "door", value: "opening")
+    logDebug 'open()'
+    sendEvent(name: 'door', value: 'opening')
 }
 
 def close() {
-    logDebug "close()"
-    sendEvent(name: "door", value: "closing")
+    logDebug 'close()'
+    sendEvent(name: 'door', value: 'closing')
 }
 
 def on() {
@@ -46,8 +46,8 @@ def off() {
 }
 
 def doorChangeHandler(newValue) {
-    logDebug "doorChangeHandler ${newValue}"
-    sendEvent(name: "door", value: newValue)
+    logDebug "doorChangeHandler() called: ${newValue}"
+    sendEvent(name: 'door', value: newValue)
 }
 
 private logDebug(message) {
