@@ -29,12 +29,12 @@ def configure() {
 
 def open() {
     logDebug 'open()'
-    sendEvent(name: 'door', value: 'opening')
+    sendEvent(name: 'door', value: 'opening', isStateChange: true)
 }
 
 def close() {
     logDebug 'close()'
-    sendEvent(name: 'door', value: 'closing')
+    sendEvent(name: 'door', value: 'closing', isStateChange: true)
 }
 
 def on() {
