@@ -51,10 +51,18 @@ def uninstalled() {
 
 def garageDoorChangeHandler(event) {
     logDebug "garageDoorChangeHandler() called: ${event.name} ${event.value}"
-    if (event.value == 'opening' && actualDoorState() == 'closed') {
+    def actualDoorState = actualDoorState()
+    if (event.value == 'opening' && actualDoorState == 'closed') {
         pressGarageDoorButton()
-    } else if (event.value == 'closing' && actualDoorState() == 'open') {
+    } else if (event.value == 'closing' && actualDoorState == 'open') {
         playAudioAlert()
+        pressGarageDoorButton()
+    } else if (['opening', 'closing'].contains(event.value) && actualDoorState == 'unknown') {
+        // If the door is in an unknown state, just press the button. A state of 'unknown'
+        // probably indicates that the door is halfway open. If the user clicks the door
+        // control tile in a dashboard, we should at least press the button to get the
+        // door moving. Once it is completely closed or open, we will know what state
+        // it's in.
         pressGarageDoorButton()
     }
 }
