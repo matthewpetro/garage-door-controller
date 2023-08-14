@@ -51,9 +51,9 @@ def uninstalled() {
 
 def garageDoorChangeHandler(event) {
     logDebug "garageDoorChangeHandler called: ${event.name} ${event.value}"
-    if (event.value == "opening" && actualDoorState() == "closed") {
+    if (event.value == "opening" && actualDoorState() != "open") {
         pressGarageDoorButton()
-    } else if (event.value == "closing" && actualDoorState() == "open") {
+    } else if (event.value == "closing" && actualDoorState() != "closed") {
         playAudioAlert()
         pressGarageDoorButton()
     }
@@ -101,9 +101,9 @@ private playAudioAlert() {
 def openSensorHandler(event) {
     logDebug "openSensorHandler called: ${event.name} ${event.value}"
     def doorDevice = getChildDevice(state.deviceNetworkId)
-    def doorState = doorDevice.currentValue("door")
+    def doorDeviceState = doorDevice.currentValue("door")
 
-    if (event.value == "open" && doorState != "closing") {
+    if (event.value == "open" && doorDeviceState != "closing") {
         doorDevice.doorChangeHandler("closing")
     } else if (event.value == "closed") {
         doorDevice.doorChangeHandler("open")
@@ -113,9 +113,9 @@ def openSensorHandler(event) {
 def closedSensorHandler(event) {
     logDebug "closedSensorHandler called: ${event.name} ${event.value}"
     def doorDevice = getChildDevice(state.deviceNetworkId)
-    def doorState = doorDevice.currentValue("door")
+    def doorDeviceState = doorDevice.currentValue("door")
 
-    if (event.value == "open" && doorState != "opening") {
+    if (event.value == "open" && doorDeviceState != "opening") {
         doorDevice.doorChangeHandler("opening")
     } else if (event.value == "closed") {
         doorDevice.doorChangeHandler("closed")
