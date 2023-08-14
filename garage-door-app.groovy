@@ -11,6 +11,7 @@ definition(
 preferences {
     section("Devices") {
         input "relay", "capability.switch", title: "Relay that controls the garage door opener", required: true
+        input "willRelayAutoOpen", "bool", title: "Set to true if the relay device is configured to auto open after a delay. Set to false if you want to use the setting below to open the relay after the specified number of milliseconds.", required: true, defaultValue: true
         input "relayCloseTime", "number", title: "Number of milliseconds to keep relay closed (default: 250, range: 100..1000)?", required: false, defaultValue: 250, range: '100..1000'
         input "openContactSensor", "capability.contactSensor", title: "Contact/tilt sensor that detects door open state", required: true
         input "closedContactSensor", "capability.contactSensor", title: "Contact/tilt sensor that detects door closed state", required: true
@@ -25,7 +26,7 @@ preferences {
     }
 
     section("Logging") {
-        input("debug", "bool", title: "Enable logging?", required: true, defaultValue: false)
+        input("debug", "bool", title: "Enable debug logging?", required: true, defaultValue: false)
     }
 }
 
@@ -34,7 +35,7 @@ def installed() {
     updated()
     def deviceNetworkId = "${app.id}-simulated-garage-door-device"
     def doorDevice = addChildDevice("Petro", "Simulated Garage Door Device", deviceNetworkId, null, [label: "Simulated Garage Door Device"])
-    state.data.deviceNetworkId = deviceNetworkId
+    state.deviceNetworkId = deviceNetworkId
     subscribe(doorDevice, "door", "garageDoorChangeHandler")
 }
 
@@ -71,8 +72,10 @@ private actualDoorState() {
 private pressGarageDoorButton() {
     logDebug "pressGarageDoorButton"
     relay.on()
-    pauseExecution(relayCloseTime)
-    relay.off()
+    if (!willRelayAutoOpen) {
+        pauseExecution(relayCloseTime)
+        relay.off()
+    }
 }
 
 private playAudioAlert() {
@@ -97,7 +100,7 @@ private playAudioAlert() {
 
 def openSensorHandler(event) {
     logDebug "openSensorHandler called: ${event.name} ${event.value}"
-    def doorDevice = getChildDevice(state.data.deviceNetworkId)
+    def doorDevice = getChildDevice(state.deviceNetworkId)
     def doorState = doorDevice.currentValue("door")
 
     if (event.value == "open" && doorState != "closing") {
@@ -109,7 +112,7 @@ def openSensorHandler(event) {
 
 def closedSensorHandler(event) {
     logDebug "closedSensorHandler called: ${event.name} ${event.value}"
-    def doorDevice = getChildDevice(state.data.deviceNetworkId)
+    def doorDevice = getChildDevice(state.deviceNetworkId)
     def doorState = doorDevice.currentValue("door")
 
     if (event.value == "open" && doorState != "opening") {
