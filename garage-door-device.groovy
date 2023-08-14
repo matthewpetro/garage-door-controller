@@ -48,8 +48,17 @@ def off() {
 def doorChangeHandler(newValue) {
     logDebug "doorChangeHandler() called: ${newValue}"
     sendEvent(name: 'door', value: newValue)
+    if (newValue == 'open') {
+        sendEvent(name: 'switch', value: 'on')
+    } else if (newValue == 'closed') {
+        sendEvent(name: 'switch', value: 'off')
+    }
 }
 
-private logDebug(message) {
+private void logDebug(String message) {
+    if (debug) log.debug message
+}
+
+private void logDebug(GString message) {
     if (debug) log.debug message
 }
