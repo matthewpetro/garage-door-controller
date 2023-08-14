@@ -56,16 +56,11 @@ def garageDoorChangeHandler(event) {
     logDebug "actualDoorState: ${actualDoorState}"
     if (event.value == 'opening' && actualDoorState == 'closed') {
         pressGarageDoorButton()
+        runIn(doorStateCheckDelay, verifyDoorState)
     } else if (event.value == 'closing' && actualDoorState == 'open') {
         playAudioAlert()
         pressGarageDoorButton()
-    }
-
-    // If the door is opening or closing, we should check the door after a delay.
-    // The door may stop halfway, so having the garage door device in
-    // an unknown state is better than it being stuck in opening or closing.
-    if (['opening', 'closing'].contains(event.value)) {
-        runIn(doorStateCheckDelay, 'verifyDoorState')
+        runIn(doorStateCheckDelay, verifyDoorState)
     }
 }
 
@@ -73,8 +68,11 @@ private verifyDoorState() {
     logDebug 'verifyDoorState()'
     def doorDevice = getChildDevice(state.deviceNetworkId)
     def doorDeviceState = doorDevice.currentValue('door')
-    if (['opening', 'closing'].contains(doorDeviceState)) {
-        doorDevice.doorChangeHandler(actualDoorState())
+    if (!['open', 'closed'].contains(doorDeviceState)) {
+        String actualDoorState = actualDoorState()
+        if (['open', 'closed'].contains(actualDoorState)) {
+            doorDevice.doorChangeHandler(actualDoorState)
+        }
     }
 }
 
