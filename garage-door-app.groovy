@@ -76,23 +76,23 @@ private pressGarageDoorButton() {
 }
 
 private playAudioAlert() {
-  if (null != alarm) {
-    if (debug) logDebug("Activating alarm device")
-    if (alarmSound && alarmStrobe) {
-      alarm.both()
-    } else if (alarmSound) {
-      alarm.siren()
-    } else if (alarmStrobe) {
-      alarm.strobe()
+    if (null != alarm) {
+        if (debug) logDebug("Activating alarm device")
+        if (alarmSound && alarmStrobe) {
+            alarm.both()
+        } else if (alarmSound) {
+            alarm.siren()
+        } else if (alarmStrobe) {
+            alarm.strobe()
+        }
+        pauseExecution(alarmDuration * 1000)
+        if (debug) logDebug("Stopping alarm device")
+        alarm.off()
     }
-    pauseExecution(alarmDuration * 1000)
-    if (debug) logDebug("Stopping alarm device")
-    alarm.off()
-  }
-  if (null != tone) {
-    if (debug) logDebug("Playing alert tone")
-    tone.beep()
-  }
+    if (null != tone) {
+        if (debug) logDebug("Playing alert tone")
+        tone.beep()
+    }
 }
 
 def openSensorHandler(event) {
