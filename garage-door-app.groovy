@@ -56,11 +56,11 @@ def garageDoorChangeHandler(event) {
     logDebug "actualDoorState: ${actualDoorState}"
     if (event.value == 'opening' && actualDoorState == 'closed') {
         pressGarageDoorButton()
-        runIn(doorStateCheckDelay, 'verifyDoorState')
+        runIn(doorStateCheckDelay, 'syncDoorState')
     } else if (event.value == 'closing' && actualDoorState == 'open') {
         playAudioAlert()
         pressGarageDoorButton()
-        runIn(doorStateCheckDelay, 'verifyDoorState')
+        runIn(doorStateCheckDelay, 'syncDoorState')
     }
 }
 
@@ -69,8 +69,8 @@ def garageDoorChangeHandler(event) {
 // won't change state and the door device will be left in an opening or closing state.
 // If the door device is not open or closed after a certain amount of time, this method
 // will sync the device state to the actual door state.
-private verifyDoorState() {
-    logDebug 'verifyDoorState()'
+private syncDoorState() {
+    logDebug 'syncDoorState()'
     def doorDevice = getChildDevice(state.deviceNetworkId)
     def doorDeviceState = doorDevice.currentValue('door')
     if (!['open', 'closed'].contains(doorDeviceState)) {
