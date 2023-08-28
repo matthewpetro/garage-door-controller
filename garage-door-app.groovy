@@ -48,6 +48,9 @@ def updated() {
 
 def uninstalled() {
     logDebug 'Uninstalled'
+    unsubscribe(openContactSensor)
+    unsubscribe(closedContactSensor)
+    deleteChildDevice(getChildDevice(state.deviceNetworkId))
 }
 
 def garageDoorChangeHandler(event) {
@@ -144,10 +147,6 @@ def closedSensorHandler(event) {
     }
 }
 
-private void logDebug(String message) {
-    if (debug) log.debug message
-}
-
-private void logDebug(GString message) {
+private void logDebug(message) {
     if (debug) log.debug message
 }
