@@ -59,10 +59,6 @@ def doorChangeHandler(newValue) {
     }
 }
 
-private void logDebug(String message) {
-    if (debug) log.debug message
-}
-
-private void logDebug(GString message) {
+private void logDebug(message) {
     if (debug) log.debug message
 }
