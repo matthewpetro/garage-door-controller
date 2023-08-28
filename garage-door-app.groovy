@@ -13,8 +13,8 @@ preferences {
         input 'relay', 'capability.switch', title: 'Relay that controls the garage door opener', required: true
         input 'willRelayAutoOpen', 'bool', title: 'Set to true if the relay device is configured to auto open after a delay. Set to false if you want to use the setting below to open the relay after the specified number of milliseconds.', required: true, defaultValue: true
         input 'relayCloseTime', 'number', title: 'Number of milliseconds to keep relay closed (default: 250, range: 100..1000)', required: false, defaultValue: 250, range: '100..1000'
-        input 'openContactSensor', 'capability.contactSensor', title: 'Contact/tilt sensor that detects door open state', required: true
         input 'closedContactSensor', 'capability.contactSensor', title: 'Contact/tilt sensor that detects door closed state', required: true
+        input 'openContactSensor', 'capability.contactSensor', title: 'Contact/tilt sensor that detects door open state', required: false
         input 'doorStateCheckDelay', 'number', title: 'Number of seconds to wait before verifying that door has opened or closed (default: 30, range: 1..60)', required: false, defaultValue: 30, range: '1..60'
     }
 
@@ -42,14 +42,18 @@ def installed() {
 
 def updated() {
     logDebug 'Updated'
-    subscribe(openContactSensor, 'contact', 'openSensorHandler')
     subscribe(closedContactSensor, 'contact', 'closedSensorHandler')
+    if (openContactSensor) {
+        subscribe(openContactSensor, 'contact', 'openSensorHandler')
+    }
 }
 
 def uninstalled() {
     logDebug 'Uninstalled'
-    unsubscribe(openContactSensor)
     unsubscribe(closedContactSensor)
+    if (openContactSensor) {
+        unsubscribe(openContactSensor)
+    }
     deleteChildDevice(getChildDevice(state.deviceNetworkId))
 }
 
@@ -67,11 +71,8 @@ def garageDoorChangeHandler(event) {
     }
 }
 
-// This method is meant to verify that the door actually opened or closed after the relay was pressed.
-// If the door doesn't move because it has been physically blocked or disabled, the contacts
-// won't change state and the door device will be left in an opening or closing state.
-// If the door device is not open or closed after a certain amount of time, this method
-// will sync the device state to the actual door state.
+// This method is meant to verify that the door actually opened or closed after the relay was pressed
+// and sync the door state with the simulated garage door device if necessary.
 private syncDoorState() {
     logDebug 'syncDoorState()'
     def doorDevice = getChildDevice(state.deviceNetworkId)
@@ -85,12 +86,22 @@ private syncDoorState() {
 }
 
 private String actualDoorState() {
-    if (openContactSensor.currentValue('contact') == 'closed') {
-        return 'open'
-    } else if (closedContactSensor.currentValue('contact') == 'closed') {
-        return 'closed'
+    if (null != openContactSensor) {
+        // If a contact sensor is configured to detect the open state
+        if (openContactSensor.currentValue('contact') == 'closed') {
+            return 'open'
+        } else if (closedContactSensor.currentValue('contact') == 'closed') {
+            return 'closed'
+        } else {
+            return 'unknown'
+        }
     } else {
-        return 'unknown'
+        // If only a contact sensor is configured to detect the closed state
+        if (closedContactSensor.currentValue('contact') == 'closed') {
+            return 'closed'
+        } else {
+            return 'open'
+        }
     }
 }
 
