@@ -43,7 +43,7 @@ def installed() {
 def updated() {
     logDebug 'Updated'
     subscribe(closedContactSensor, 'contact', 'closedSensorHandler')
-    if (openContactSensor) {
+    if (null != openContactSensor) {
         subscribe(openContactSensor, 'contact', 'openSensorHandler')
     }
 }
@@ -51,7 +51,7 @@ def updated() {
 def uninstalled() {
     logDebug 'Uninstalled'
     unsubscribe(closedContactSensor)
-    if (openContactSensor) {
+    if (null != openContactSensor) {
         unsubscribe(openContactSensor)
     }
     deleteChildDevice(getChildDevice(state.deviceNetworkId))
