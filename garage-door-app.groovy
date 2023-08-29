@@ -42,6 +42,8 @@ def installed() {
 
 def updated() {
     logDebug 'Updated'
+    unsubscribe('closedSensorHandler')
+    unsubscribe('openSensorHandler')
     subscribe(closedContactSensor, 'contact', 'closedSensorHandler')
     if (null != openContactSensor) {
         subscribe(openContactSensor, 'contact', 'openSensorHandler')
