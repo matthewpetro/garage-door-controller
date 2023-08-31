@@ -1,3 +1,16 @@
+/**
+ * Garage Door App for Hubitat. Inspired by lgkahn's virtual garage door app originally written
+ * for SmartThings: https://github.com/lgkahn/hubitat/blob/master/lgkgaragedoor.groovy
+ *
+ * The app uses one or two contact or tilt sensors to determine the state of the garage door. If only one sensor is
+ * used, it should be placed in a location so that it is closed when the door is fully closed. If two sensors are used,
+ * one should be situated to detect when the door is fully closed and the other should detect when the door is fully
+ * open.
+ *
+ * The app relies on a relay device to control the physical opener. Using a dry contact relay that is hard wired to the
+ * opener or to a remote control is recommended, but any device that supports switch capability can be used.
+ */
+
 definition(
         name: 'Garage Door App',
         namespace: 'Petro',
@@ -61,7 +74,7 @@ def uninstalled() {
 
 def garageDoorChangeHandler(event) {
     logDebug "garageDoorChangeHandler() called: ${event.name} ${event.value}"
-    String actualDoorState = actualDoorState()
+    def actualDoorState = actualDoorState()
     logDebug "actualDoorState: ${actualDoorState}"
     if (event.value == 'opening' && actualDoorState == 'closed') {
         pressGarageDoorButton()
@@ -80,14 +93,14 @@ private syncDoorState() {
     def doorDevice = getChildDevice(state.deviceNetworkId)
     def doorDeviceState = doorDevice.currentValue('door')
     if (!['open', 'closed'].contains(doorDeviceState)) {
-        String actualDoorState = actualDoorState()
+        def actualDoorState = actualDoorState()
         if (['open', 'closed'].contains(actualDoorState)) {
             doorDevice.doorChangeHandler(actualDoorState)
         }
     }
 }
 
-private String actualDoorState() {
+private actualDoorState() {
     if (null != openContactSensor) {
         // If a contact sensor is configured to detect the open state
         if (openContactSensor.currentValue('contact') == 'closed') {
@@ -118,7 +131,7 @@ private pressGarageDoorButton() {
 
 private playAudioAlert() {
     if (null != alarm) {
-        if (debug) logDebug 'Activating alarm device'
+        logDebug 'Activating alarm device'
         if (alarmSound && alarmStrobe) {
             alarm.both()
         } else if (alarmSound) {
@@ -127,11 +140,11 @@ private playAudioAlert() {
             alarm.strobe()
         }
         pauseExecution(alarmDuration * 1000)
-        if (debug) logDebug 'Stopping alarm device'
+        logDebug 'Stopping alarm device'
         alarm.off()
     }
     if (null != tone) {
-        if (debug) logDebug 'Playing alert tone'
+        logDebug 'Playing alert tone'
         tone.beep()
     }
 }
