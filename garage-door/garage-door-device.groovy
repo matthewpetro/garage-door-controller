@@ -11,7 +11,7 @@
  */
 
 metadata {
-    definition(name: 'Simulated Garage Door Device', namespace: 'Petro', author: 'Matthew Petro') {
+    definition(name: 'Simulated Garage Door Device', namespace: 'MPetro', author: 'Matthew Petro') {
         capability 'Actuator'
         capability 'Configuration'
         capability 'Door Control'

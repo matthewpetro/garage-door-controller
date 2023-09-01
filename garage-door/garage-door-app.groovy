@@ -13,7 +13,7 @@
 
 definition(
         name: 'Garage Door App',
-        namespace: 'Petro',
+        namespace: 'MPetro',
         author: 'Matthew Petro',
         description: 'Combine a relay, siren, and sensors into a complete garage door solution',
         category: 'Convenience',
