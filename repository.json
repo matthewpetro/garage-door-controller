@@ -1,3 +1,17 @@
 {
-  "author": "Matthew Petro"
+  "author": "Matthew Petro",
+  "gitHubUrl": "https://github.com/matthewpetro/hubitat-projects",
+  "payPalUrl": "https://www.paypal.com/donate/?business=YTBJCV9RA8ZEW&no_recurring=1&item_name=Thanks+for+your+contribution%21+I%27m+glad+you+find+value+in+the+software+I%27ve+created.&currency_code=USD",
+  "packages": [
+    {
+      "name": "Garage Door Opener",
+      "id": "96595e37-6aa2-4742-bec1-df3f2c9bd217",
+      "location": "",
+      "category": "Integrations",
+      "description": "An app and driver that can combine a switch/relay and one or two contact/tilt sensors to create a garage door control device.",
+      "tags": [
+        "Garage Doors"
+      ]
+    }
+  ]
 }

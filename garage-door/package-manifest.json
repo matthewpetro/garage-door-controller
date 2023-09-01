@@ -1,0 +1,31 @@
+{
+  "author": "Matthew Petro",
+  "packageName": "Garage Door Opener",
+  "version": "1.0.0",
+  "dateReleased": "2023-09-01",
+  "documentationLink": "https://github.com/matthewpetro/hubitat-projects/blob/main/garage-door/README.md",
+  "category": "Integrations",
+  "tags": [
+    "Garage Doors"
+  ],
+  "apps": [
+    {
+      "id": "9032714c-de93-42cd-a3f6-77baf00b34ed",
+      "name": "Garage Door App",
+      "namespace": "MPetro",
+      "location": "https://raw.githubusercontent.com/matthewpetro/hubitat-projects/main/garage-door/garage-door-app.groovy",
+      "required": true,
+      "oauth": false,
+      "primary": false
+    }
+  ],
+  "drivers": [
+    {
+      "id": "415df894-b70d-4350-8622-23baf3718f92",
+      "name": "Garage Door Device",
+      "namespace": "MPetro",
+      "location": "https://raw.githubusercontent.com/matthewpetro/hubitat-projects/main/garage-door/garage-door-device.groovy",
+      "required": true
+    }
+  ]
+}
