@@ -7,7 +7,7 @@
  * one should be situated to detect when the door is fully closed and the other should detect when the door is fully
  * open.
  *
- * The app relies on a relay device to control the physical opener. Using a dry contact relay that is hard wired to the
+ * The app relies on a relay device to control the physical opener. Using a dry contact relay that is hard-wired to the
  * opener or to a remote control is recommended, but any device that supports switch capability can be used.
  */
 
