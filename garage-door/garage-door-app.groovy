@@ -49,7 +49,7 @@ def installed() {
     logDebug 'Installed'
     updated()
     def deviceNetworkId = "${app.id}-simulated-garage-door-device"
-    def doorDevice = addChildDevice('Petro', 'Simulated Garage Door Device', deviceNetworkId, null, [label: 'Simulated Garage Door Device'])
+    def doorDevice = addChildDevice('MPetro', 'Simulated Garage Door Device', deviceNetworkId, null, [label: 'Simulated Garage Door Device'])
     state.deviceNetworkId = deviceNetworkId
     subscribe(doorDevice, 'door', 'garageDoorChangeHandler')
 }
