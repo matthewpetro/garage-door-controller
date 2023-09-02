@@ -11,7 +11,12 @@
  */
 
 metadata {
-    definition(name: 'Simulated Garage Door Device', namespace: 'MPetro', author: 'Matthew Petro') {
+    definition(
+            name: 'Simulated Garage Door Device',
+            namespace: 'MPetro',
+            author: 'Matthew Petro',
+            importUrl: 'https://raw.githubusercontent.com/matthewpetro/hubitat-projects/main/garage-door/garage-door-device.groovy'
+    ) {
         capability 'Actuator'
         capability 'Configuration'
         capability 'Door Control'

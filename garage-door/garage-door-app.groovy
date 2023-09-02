@@ -17,6 +17,7 @@ definition(
         author: 'Matthew Petro',
         description: 'Combine a relay, siren, and sensors into a complete garage door solution',
         category: 'Convenience',
+        importUrl: 'https://raw.githubusercontent.com/matthewpetro/hubitat-projects/main/garage-door/garage-door-app.groovy',
         iconUrl: '',
         iconX2Url: ''
 )
