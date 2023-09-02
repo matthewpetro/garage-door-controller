@@ -1,8 +1,8 @@
 {
   "author": "Matthew Petro",
   "packageName": "Garage Door Opener",
-  "version": "1.0.0",
-  "dateReleased": "2023-09-01",
+  "version": "1.0.1",
+  "dateReleased": "2023-09-02",
   "documentationLink": "https://github.com/matthewpetro/hubitat-projects/blob/main/garage-door/README.md",
   "category": "Integrations",
   "tags": [
