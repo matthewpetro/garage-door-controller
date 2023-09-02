@@ -6,7 +6,7 @@
     {
       "name": "Garage Door Opener",
       "id": "96595e37-6aa2-4742-bec1-df3f2c9bd217",
-      "location": "",
+      "location": "https://raw.githubusercontent.com/matthewpetro/hubitat-projects/main/garage-door/package-manifest.json",
       "category": "Integrations",
       "description": "An app and driver that can combine a switch/relay and one or two contact/tilt sensors to create a garage door control device.",
       "tags": [
