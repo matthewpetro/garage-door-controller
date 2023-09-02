@@ -25,7 +25,7 @@ definition(
 preferences {
     section('Devices') {
         input 'relay', 'capability.switch', title: 'Relay that controls the garage door opener', required: true
-        input 'willRelayAutoOpen', 'bool', title: 'Set to true if the relay device is configured to auto open after a delay. Set to false if you want to use the setting below to open the relay after the specified number of milliseconds.', required: true, defaultValue: true
+        input 'useRelayCloseTime', 'bool', title: 'Set to true if you want to use the setting below to open the relay after the specified number of milliseconds. Set to false if the relay device is configured to auto open after a delay.', required: true, defaultValue: true
         input 'relayCloseTime', 'number', title: 'Number of milliseconds to keep relay closed (default: 250, range: 100..1000)', required: false, defaultValue: 250, range: '100..1000'
         input 'closedContactSensor', 'capability.contactSensor', title: 'Contact/tilt sensor that detects door closed state', required: true
         input 'openContactSensor', 'capability.contactSensor', title: 'Contact/tilt sensor that detects door open state', required: false
@@ -124,7 +124,7 @@ private actualDoorState() {
 private pressGarageDoorButton() {
     logDebug 'pressGarageDoorButton()'
     relay.on()
-    if (!willRelayAutoOpen) {
+    if (useRelayCloseTime) {
         pauseExecution(relayCloseTime)
         relay.off()
     }
