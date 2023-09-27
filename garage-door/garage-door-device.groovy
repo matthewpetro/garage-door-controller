@@ -19,6 +19,7 @@ metadata {
     ) {
         capability 'Actuator'
         capability 'Configuration'
+        capability 'Contact Sensor'
         capability 'Door Control'
         capability 'Garage Door Control'
         capability 'Sensor'
@@ -71,8 +72,10 @@ def doorChangeHandler(newValue) {
     sendEvent(name: 'door', value: newValue)
     if (newValue == 'open') {
         sendEvent(name: 'switch', value: 'on')
+        sendEvent(name: 'contact', value: 'open')
     } else if (newValue == 'closed') {
         sendEvent(name: 'switch', value: 'off')
+        sendEvent(name: 'contact', value: 'closed')
     }
 }
 

@@ -1,10 +1,10 @@
 {
   "author": "Matthew Petro (@matthewpetro)",
   "packageName": "Garage Door Opener",
-  "version": "1.0.3",
-  "dateReleased": "2023-09-02",
+  "version": "1.0.4",
+  "dateReleased": "2023-09-27",
   "documentationLink": "https://github.com/matthewpetro/hubitat-projects/blob/main/garage-door/README.md",
-  "releaseNotes": "Version 1.0.3 - 2023-09-02\n Changed the way the relay auto-open boolean works",
+  "releaseNotes": "Version 1.0.4 - 2023-09-27\n Added contact sensor capability to driver",
   "category": "Integrations",
   "tags": [
     "Garage Doors"
